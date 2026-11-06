@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1530">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="תיקון הכללי">
+<title>תיקון הכללי</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="img/icon-192.png">
+<link rel="apple-touch-icon" href="img/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Heebo:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b1530; --bg2:#101d45; --card:rgba(255,255,255,.06); --card2:rgba(255,255,255,.1);
+  --text:#f4ecd8; --muted:#b9b3a3; --gold:#d9b35c; --gold2:#f1d48a; --accent:#7aa2ff;
+  --serif:'Frank Ruhl Libre','David',serif; --sans:'Heebo',system-ui,sans-serif;
+  --fs:1.55rem; --lh:2;
+}
+[data-theme=light]{--bg:#f6f1e6;--bg2:#efe7d6;--card:rgba(0,0,0,.05);--card2:rgba(0,0,0,.08);--text:#1d1a14;--muted:#6b6457;--gold:#9a7a2a;--gold2:#b8923a;--accent:#2b4fb8}
+[data-theme=sepia]{--bg:#2b2117;--bg2:#3a2d1f;--card:rgba(255,255,255,.07);--card2:rgba(255,255,255,.12);--text:#f3e6c9;--muted:#c9b797;--gold:#e0b45e;--gold2:#f3d48b;--accent:#e8a24a}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100%}
+body{background:radial-gradient(1200px 600px at 50% -10%,var(--bg2),var(--bg) 60%);}
+button{font-family:inherit;cursor:pointer;border:0}
+.screen{display:none;min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}
+.screen.active{display:block}
+/* HOME */
+.hero{position:relative;height:72vh;min-height:520px;overflow:hidden}
+.hero img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,21,48,.15) 0%,rgba(11,21,48,0) 35%,var(--bg) 100%)}
+.hero .titles{position:absolute;right:0;left:0;bottom:22px;text-align:center;z-index:2;padding:0 20px}
+.kicker{font-family:var(--sans);letter-spacing:.35em;font-size:.8rem;color:var(--gold2);text-transform:uppercase;margin-bottom:8px}
+h1.big{font-family:var(--serif);font-weight:900;font-size:3.2rem;margin:0;line-height:1.05;color:#fff;text-shadow:0 4px 30px rgba(0,0,0,.6)}
+.sub{color:var(--muted);margin-top:10px;font-size:1rem}
+.homebody{padding:8px 20px 40px;max-width:560px;margin:0 auto}
+.cta{display:block;width:100%;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1b1407;font-weight:800;font-size:1.25rem;padding:18px;border-radius:18px;box-shadow:0 10px 40px rgba(217,179,92,.35);margin:10px 0 16px}
+.cta.secondary{background:var(--card2);color:var(--text);box-shadow:none;font-weight:600;font-size:1.05rem;padding:14px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}
+.stat{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:12px 8px;text-align:center}
+.stat b{display:block;font-family:var(--serif);font-size:1.8rem;color:var(--gold2);line-height:1.1}
+.stat span{font-size:.78rem;color:var(--muted)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:6px 0 14px}
+.chip{background:var(--card);border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:8px 14px;font-size:.9rem;color:var(--text)}
+.chip.active{background:var(--gold);color:#1b1407;border-color:var(--gold)}
+.psalm-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:8px 0 20px}
+.psalm-grid button{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 0;font-family:var(--serif);font-size:1.3rem;color:var(--text)}
+.psalm-grid button.done{border-color:var(--gold);color:var(--gold2)}
+/* READER */
+.topbar{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(14px);padding:10px 14px calc(8px);border-bottom:1px solid rgba(255,255,255,.06)}
+.topbar .row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.iconbtn{background:var(--card);color:var(--text);border-radius:12px;width:42px;height:42px;font-size:1.2rem;display:grid;place-items:center}
+.progress{display:flex;gap:4px;margin-top:10px}
+.progress i{flex:1;height:4px;border-radius:4px;background:var(--card2);display:block}
+.progress i.on{background:var(--gold)}
+.progress i.cur{background:var(--gold2);box-shadow:0 0 10px var(--gold2)}
+.ttl{font-family:var(--serif);font-weight:700;font-size:1.15rem;text-align:center;flex:1;color:var(--gold2)}
+.reader{max-width:680px;margin:0 auto;padding:18px 20px 120px}
+.section-title{font-family:var(--serif);font-weight:900;font-size:2.2rem;color:var(--gold2);text-align:center;margin:10px 0 2px}
+.section-sub{text-align:center;color:var(--muted);font-size:.95rem;margin-bottom:22px}
+.ornament{display:flex;align-items:center;gap:12px;color:var(--gold);opacity:.8;margin:6px 0 18px;justify-content:center}
+.ornament:before,.ornament:after{content:"";height:1px;flex:1;max-width:90px;background:linear-gradient(90deg,transparent,var(--gold))}
+.ornament:after{background:linear-gradient(270deg,transparent,var(--gold))}
+.text{font-family:var(--serif);font-size:var(--fs);line-height:var(--lh);text-align:justify;text-align-last:right;hyphens:none}
+.text .v{display:inline}
+.text .n{font-family:var(--sans);font-size:.6em;color:var(--gold);vertical-align:super;margin-inline-end:4px;opacity:.8}
+.text p{margin:0 0 1.1em}
+.text b{color:var(--gold2);font-weight:700}
+.text small{display:block;font-family:var(--sans);font-size:.72em;color:var(--muted);line-height:1.6;margin:8px 0 14px}
+.text h1,.text h2,.text h3{font-family:var(--serif);color:var(--gold2);font-size:1.15em;margin:14px 0 4px}
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:10;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(0deg,var(--bg) 60%,transparent);display:flex;gap:10px;max-width:680px;margin:0 auto}
+.nav button{flex:1;padding:15px;border-radius:16px;font-size:1.05rem;font-weight:700;background:var(--card2);color:var(--text);border:1px solid rgba(255,255,255,.08)}
+.nav button.primary{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1b1407;flex:2}
+.nav button:disabled{opacity:.35}
+.psalm-block{margin-bottom:46px}
+.collapsible .head{display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 16px;font-weight:700;margin:14px 0}
+.collapsible .body{display:none}
+.collapsible.open .body{display:block}
+/* SHEET */
+.sheet{position:fixed;inset:0;z-index:50;display:none;background:rgba(0,0,0,.55)}
+.sheet.open{display:block}
+.sheet .panel{position:absolute;bottom:0;left:0;right:0;background:var(--bg2);border-radius:24px 24px 0 0;padding:18px 20px calc(24px + env(safe-area-inset-bottom));max-height:88vh;overflow:auto;box-shadow:0 -10px 60px rgba(0,0,0,.5)}
+.sheet h3{margin:0 0 14px;font-family:var(--serif);color:var(--gold2);font-size:1.4rem}
+.setrow{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.setrow label{font-weight:600}
+input[type=range]{width:150px;accent-color:var(--gold)}
+.seg{display:flex;background:var(--card);border-radius:12px;padding:4px;gap:4px}
+.seg button{background:transparent;color:var(--muted);padding:8px 12px;border-radius:9px;font-weight:600}
+.seg button.on{background:var(--gold);color:#1b1407}
+.about{max-width:640px;margin:0 auto;padding:20px;line-height:1.8;font-size:1.05rem}
+.about h2{font-family:var(--serif);color:var(--gold2)}
+.about .card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px 16px;margin:12px 0}
+.toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:var(--gold);color:#1b1407;padding:12px 18px;border-radius:999px;font-weight:700;z-index:60;display:none;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.done-card{text-align:center;padding:30px 10px}
+.done-card .big{font-size:4rem}
+.done-card h2{font-family:var(--serif);color:var(--gold2);font-size:2rem;margin:8px 0}
+.fade{animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.credit{font-size:.75rem;color:var(--muted);text-align:center;margin-top:30px}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<section class="screen active" id="home">
+  <div class="hero">
+    <img src="img/hero.jpg" alt="">
+    <div class="titles">
+      <div class="kicker">עשרה מזמורים</div>
+      <h1 class="big">תיקון הכללי</h1>
+      <div class="sub">רבי נחמן מברסלב · נוסח עדות המזרח</div>
+    </div>
+  </div>
+  <div class="homebody">
+    <button class="cta" onclick="startReading()">התחל אמירה</button>
+    <div class="chips">
+      <button class="chip" id="modePaged" onclick="setMode('paged')">מזמור מזמור</button>
+      <button class="chip" id="modeScroll" onclick="setMode('scroll')">הכל ברצף</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="sTotal">0</b><span>תיקונים שאמרת</span></div>
+      <div class="stat"><b id="sStreak">0</b><span>ימים ברצף</span></div>
+      <div class="stat"><b id="sLast">-</b><span>אמירה אחרונה</span></div>
+    </div>
+    <div class="section-sub" style="margin-bottom:6px">קפיצה למזמור</div>
+    <div class="psalm-grid" id="psalmGrid"></div>
+    <button class="cta secondary" onclick="show('about')">על התיקון הכללי</button>
+    <button class="cta secondary" onclick="openSheet()">הגדרות תצוגה</button>
+    <div class="credit">טקסטים: ספריא (Sefaria), תיקון הכללי בנוסח rabenubook, תהילים לפי כתר ארם צובה</div>
+  </div>
+</section>
+
+<!-- READER -->
+<section class="screen" id="reader">
+  <div class="topbar">
+    <div class="row">
+      <button class="iconbtn" onclick="show('home')" title="חזרה">✕</button>
+      <div class="ttl" id="readerTitle"></div>
+      <button class="iconbtn" onclick="openSheet()" title="הגדרות">Aא</button>
+    </div>
+    <div class="progress" id="progress"></div>
+  </div>
+  <div class="reader" id="readerBody"></div>
+  <div class="nav" id="nav">
+    <button id="prevBtn" onclick="go(-1)">הקודם</button>
+    <button class="primary" id="nextBtn" onclick="go(1)">הבא</button>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="screen" id="about">
+  <div class="topbar"><div class="row"><button class="iconbtn" onclick="show('home')">✕</button><div class="ttl">על התיקון הכללי</div><span style="width:42px"></span></div></div>
+  <div class="about">
+    <h2>מה זה תיקון הכללי</h2>
+    <p>תיקון הכללי הוא סדר של עשרה מזמורי תהילים שגילה רבי נחמן מברסלב. המזמורים לפי הסדר: טז, לב, מא, מב, נט, עז, צ, קה, קלז, קנ. רבי נחמן לימד שעשרת המזמורים האלה כנגד עשרה מיני נגינה שבהם נאמר ספר תהילים, ושאמירתם ביחד היא תיקון כללי לנפש, תיקון שמועיל לכל הפגמים יחד.</p>
+    <div class="card">רבי נחמן אמר על התיקון שהוא דבר חדש לגמרי, שלא היה ידוע מימות עולם, ושהעשרה מזמורים האלה מועילים מאוד. הוא גם קשר את האמירה לקבר שלו: מי שיבוא לקברו, יתן פרוטה לצדקה ויאמר את עשרת המזמורים, הוא מבטיח לעזור לו ולעשות הכל בשבילו.</div>
+    <h2>איך אומרים</h2>
+    <p>נהוג לומר קודם את הקטע "הריני מקשר עצמי", אחר כך את עשרת המזמורים לפי הסדר, ולסיים בפסוקים "מי יתן מציון" ובתפילה קצרה. מי שרוצה מוסיף את התפילה הארוכה של רבי נתן מליקוטי תפילות. אפשר לומר בכל שעה, ונהוג במיוחד ביום, אחרי טבילה במקווה, ובכל מצב שבו צריך תיקון או ישועה.</p>
+    <h2>על האפליקציה</h2>
+    <p>כל הטקסטים נשמרים על המכשיר, כך שהאפליקציה עובדת גם בלי אינטרנט אחרי הפתיחה הראשונה. הספירה של התיקונים והרצף נשמרת מקומית בטלפון שלך בלבד.</p>
+    <p class="credit">הטקסטים נלקחו מספריא: תהילים לפי מהדורת כתר ארם צובה (ללא טעמים), והתפילות מתוך תיקון הכללי מהדורת rabenubook.</p>
+  </div>
+</section>
+
+<!-- SETTINGS SHEET -->
+<div class="sheet" id="sheet" onclick="if(event.target===this)closeSheet()">
+  <div class="panel">
+    <h3>תצוגה</h3>
+    <div class="setrow"><label>גודל אותיות</label><input type="range" min="1.1" max="2.6" step="0.05" id="fsRange"></div>
+    <div class="setrow"><label>ריווח שורות</label><input type="range" min="1.5" max="2.6" step="0.05" id="lhRange"></div>
+    <div class="setrow"><label>ניקוד</label><div class="seg" id="nikudSeg"><button data-v="1">עם</button><button data-v="0">בלי</button></div></div>
+    <div class="setrow"><label>מספרי פסוקים</label><div class="seg" id="numSeg"><button data-v="1">הצג</button><button data-v="0">הסתר</button></div></div>
+    <div class="setrow"><label>ערכת צבעים</label><div class="seg" id="themeSeg"><button data-v="dark">לילה</button><button data-v="sepia">קלף</button><button data-v="light">יום</button></div></div>
+    <div class="setrow"><label>מסך דולק בזמן אמירה</label><div class="seg" id="wakeSeg"><button data-v="1">כן</button><button data-v="0">לא</button></div></div>
+    <button class="cta" style="margin-top:16px" onclick="closeSheet()">סגור</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script>
+const D = window.TIKKUN_DATA;
+const ORDER = [16,32,41,42,59,77,90,105,137,150];
+const HEB = {16:'טז',32:'לב',41:'מא',42:'מב',59:'נט',77:'עז',90:'צ',105:'קה',137:'קלז',150:'קנ'};
+const S = JSON.parse(localStorage.getItem('tikkun.settings')||'{}');
+const defaults = {fs:1.55, lh:2, nikud:1, nums:1, theme:'dark', wake:1, mode:'paged'};
+for (const k in defaults) if (S[k]===undefined) S[k]=defaults[k];
+const P = JSON.parse(localStorage.getItem('tikkun.progress')||'{"total":0,"dates":[]}');
+let steps = []; let cur = 0; let wakeLock = null;
+
+function save(){localStorage.setItem('tikkun.settings',JSON.stringify(S));localStorage.setItem('tikkun.progress',JSON.stringify(P));}
+function applySettings(){
+  document.documentElement.style.setProperty('--fs',S.fs+'rem');
+  document.documentElement.style.setProperty('--lh',S.lh);
+  document.documentElement.setAttribute('data-theme',S.theme);
+  document.querySelector('meta[name=theme-color]').content = S.theme==='light'?'#f6f1e6':S.theme==='sepia'?'#2b2117':'#0b1530';
+  fsRange.value=S.fs; lhRange.value=S.lh;
+  seg('nikudSeg',S.nikud); seg('numSeg',S.nums); seg('themeSeg',S.theme); seg('wakeSeg',S.wake);
+  modePaged.classList.toggle('active',S.mode==='paged'); modeScroll.classList.toggle('active',S.mode==='scroll');
+}
+function seg(id,v){document.querySelectorAll('#'+id+' button').forEach(b=>b.classList.toggle('on',String(b.dataset.v)===String(v)));}
+document.querySelectorAll('.seg').forEach(s=>s.addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  const map={nikudSeg:'nikud',numSeg:'nums',themeSeg:'theme',wakeSeg:'wake'};
+  const k=map[s.id]; S[k]= (k==='theme')?b.dataset.v:Number(b.dataset.v); save(); applySettings(); render();
+}));
+fsRange.oninput=e=>{S.fs=Number(e.target.value);save();applySettings();};
+lhRange.oninput=e=>{S.lh=Number(e.target.value);save();applySettings();};
+function setMode(m){S.mode=m;save();applySettings();}
+function openSheet(){sheet.classList.add('open')} function closeSheet(){sheet.classList.remove('open')}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0); if(id!=='reader') releaseWake();}
+function toast(t){const e=document.getElementById('toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',2200);}
+
+const NIKUD=/[֑-ׇ]/g;
+function fmt(s){ return S.nikud? s : s.replace(NIKUD,''); }
+function psalmHTML(n){
+  const verses = D.psalms[n];
+  return `<div class="psalm-block fade"><div class="section-title">מזמור ${HEB[n]}</div><div class="section-sub">תהילים פרק ${HEB[n]}</div><div class="ornament">✦</div><div class="text">${verses.map((v,i)=>`<span class="v">${S.nums?`<span class="n">${i+1}</span>`:''}${fmt(v)} </span>`).join('')}</div></div>`;
+}
+function htmlBlock(title, sub, html){
+  return `<div class="psalm-block fade"><div class="section-title">${title}</div>${sub?`<div class="section-sub">${sub}</div>`:''}<div class="ornament">✦</div><div class="text">${fmt(html)}</div></div>`;
+}
+function buildSteps(){
+  steps = [
+    {t:'לפני האמירה', h:()=>htmlBlock('לפני האמירה','הריני מקשר עצמי, לשם יחוד', D.intro)},
+    ...ORDER.map(n=>({t:'מזמור '+HEB[n], h:()=>psalmHTML(n), psalm:n})),
+    {t:'סיום', h:()=>htmlBlock('אחרי האמירה','פסוקים ותפילה קצרה', D.after + '<div class="ornament">✦</div>' + D.short) +
+      `<div class="collapsible" id="natan"><div class="head" onclick="this.parentNode.classList.toggle('open')"><span>תפילה מרבי נתן, מתוך ליקוטי תפילות</span><span>▾</span></div><div class="body"><div class="text">${fmt(D.natan)}</div></div></div>
+       <div class="done-card"><div class="big">✦</div><h2>סיימת את התיקון</h2><p class="section-sub">יהי רצון שתתקבל התפילה</p><button class="cta" onclick="finish()">סיימתי, שמור</button></div>`}
+  ];
+}
+function startReading(from){
+  buildSteps(); cur = from!==undefined ? from : 0; show('reader'); render(); requestWake();
+}
+function render(){
+  if(!document.getElementById('reader').classList.contains('active')) return;
+  const body=document.getElementById('readerBody');
+  if(S.mode==='scroll'){
+    body.innerHTML = steps.map(s=>s.h()).join('');
+    document.getElementById('nav').style.display='none';
+    document.getElementById('readerTitle').textContent='תיקון הכללי';
+    document.getElementById('progress').innerHTML='';
+    if(cur>0){const el=body.querySelectorAll('.psalm-block')[cur]; if(el) el.scrollIntoView();}
+  } else {
+    body.innerHTML = steps[cur].h();
+    document.getElementById('nav').style.display='flex';
+    document.getElementById('readerTitle').textContent=steps[cur].t;
+    document.getElementById('progress').innerHTML = steps.map((s,i)=>`<i class="${i<cur?'on':i===cur?'cur':''}"></i>`).join('');
+    prevBtn.disabled = cur===0; nextBtn.textContent = cur===steps.length-1?'סיום':'הבא'; nextBtn.disabled = cur===steps.length-1;
+    window.scrollTo(0,0);
+  }
+}
+function go(d){ cur=Math.max(0,Math.min(steps.length-1,cur+d)); render(); }
+function finish(){
+  const today=new Date().toISOString().slice(0,10);
+  P.total++; if(!P.dates.includes(today)) P.dates.push(today); P.last=today; save(); updateStats();
+  toast('נשמר. ' + P.total + ' תיקונים');
+  setTimeout(()=>show('home'),900);
+}
+function streak(){
+  const set=new Set(P.dates); let n=0; const d=new Date();
+  if(!set.has(d.toISOString().slice(0,10))) d.setDate(d.getDate()-1);
+  while(set.has(d.toISOString().slice(0,10))){n++; d.setDate(d.getDate()-1);}
+  return n;
+}
+function updateStats(){
+  sTotal.textContent=P.total; sStreak.textContent=streak();
+  sLast.textContent = P.last ? new Date(P.last).toLocaleDateString('he-IL',{day:'numeric',month:'short'}) : '-';
+}
+function buildGrid(){
+  psalmGrid.innerHTML = ORDER.map((n,i)=>`<button onclick="startReading(${i+1})">${HEB[n]}</button>`).join('');
+}
+async function requestWake(){ if(S.wake && 'wakeLock' in navigator){ try{ wakeLock = await navigator.wakeLock.request('screen'); }catch(e){} } }
+function releaseWake(){ if(wakeLock){ wakeLock.release(); wakeLock=null; } }
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible' && document.getElementById('reader').classList.contains('active')) requestWake(); });
+// swipe
+let tx=null; document.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+document.addEventListener('touchend',e=>{ if(tx===null||S.mode!=='paged'||!document.getElementById('reader').classList.contains('active')) return; const dx=e.changedTouches[0].clientX-tx; if(Math.abs(dx)>70){ go(dx>0?1:-1); } tx=null; },{passive:true});
+document.addEventListener('keydown',e=>{ if(e.key==='ArrowLeft') go(1); if(e.key==='ArrowRight') go(-1); });
+
+applySettings(); updateStats(); buildGrid();
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+</script>
+</body>
+</html>
